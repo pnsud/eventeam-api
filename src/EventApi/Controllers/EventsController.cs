@@ -30,20 +30,20 @@ public class EventsController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult<Event> Create(Event newEvent)
+    public ActionResult<Event> Create(CreateEventRequest request)
     {
-        if (string.IsNullOrWhiteSpace(newEvent.Title))
-            return BadRequest("Title is required.");
-        if (newEvent.StartAt == default)
-            return BadRequest("StartAt is required.");
-        if (newEvent.EndAt == default)
-            return BadRequest("EndAt is required.");
-        if (newEvent.EndAt <= newEvent.StartAt)
-            return BadRequest("EndAt must be later than StartAt.");
+        var newEvent = new Event
+        {
+            Title = request.Title,
+            Description = request.Description,
+            StartAt = request.StartAt!.Value,
+            EndAt = request.EndAt!.Value
+        };
 
         var created = _eventService.Create(newEvent);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
+
 
     [HttpPut("{id:guid}")]
     public IActionResult Update(Guid id, Event updated)
