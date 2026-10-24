@@ -6,7 +6,7 @@ public class EventService : IEventService
 {
     private readonly List<Event> _events = new();
 
-    public IEnumerable<Event> GetAll() => _events;
+    public IEnumerable<Event> GetAll() => _events.ToList();
 
     public Event? GetById(Guid id) => _events.FirstOrDefault(e => e.Id == id);
 
