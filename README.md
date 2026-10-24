@@ -31,7 +31,10 @@
 
 ```bash
 git clone <ссылка на репозиторий>
-cd EventApi
+cd eventeam-api
 dotnet restore
 dotnet run --project src/EventApi
 ```
+
+- Swagger UI: [http://localhost:5194/swagger](http://localhost:5194/swagger)
+- `UseSwagger()` включён только в окружении `Development` (см. `Program.cs`). В `Production` Swagger не поднимется.
