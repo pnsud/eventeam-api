@@ -1,6 +1,5 @@
 @EventApi_HostAddress = http://localhost:5194
 
-GET {{EventApi_HostAddress}}/weatherforecast/
+### Список всех событий
+GET {{EventApi_HostAddress}}/events
 Accept: application/json
-
-###
