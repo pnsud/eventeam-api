@@ -24,4 +24,13 @@ public class EventRequest : IValidatableObject
                 new[] { nameof(EndAt) });
         }
     }
+
+    public Event ToEvent() => new()
+    {
+        Title = Title,
+        Description = Description,
+        StartAt = StartAt!.Value,
+        EndAt = EndAt!.Value
+    };
+
 }

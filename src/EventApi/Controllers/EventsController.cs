@@ -32,30 +32,14 @@ public class EventsController : ControllerBase
     [HttpPost]
     public ActionResult<Event> Create(EventRequest request)
     {
-        var newEvent = new Event
-        {
-            Title = request.Title,
-            Description = request.Description,
-            StartAt = request.StartAt!.Value,
-            EndAt = request.EndAt!.Value
-        };
-
-        var created = _eventService.Create(newEvent);
+        var created = _eventService.Create(request.ToEvent());
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
     [HttpPut("{id:guid}")]
     public IActionResult Update(Guid id, EventRequest request)
     {
-        var updated = new Event
-        {
-            Title = request.Title,
-            Description = request.Description,
-            StartAt = request.StartAt!.Value,
-            EndAt = request.EndAt!.Value
-        };
-
-        return _eventService.Update(id, updated) ? NoContent() : NotFound();
+        return _eventService.Update(id, request.ToEvent()) ? NoContent() : NotFound();
     }
 
     [HttpDelete("{id:guid}")]
