@@ -16,24 +16,24 @@ public class EventsController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Event>> GetAll()
+    public ActionResult<IEnumerable<EventResponse>> GetAll()
     {
-        return Ok(_eventService.GetAll());
+        return Ok(_eventService.GetAll().Select(EventResponse.FromEvent));
     }
 
     [HttpGet("{id:guid}")]
-    public ActionResult<Event> GetById(Guid id)
+    public ActionResult<EventResponse> GetById(Guid id)
     {
         var ev = _eventService.GetById(id);
         if (ev is null) return NotFound();
-        return Ok(ev);
+        return Ok(EventResponse.FromEvent(ev));
     }
 
     [HttpPost]
-    public ActionResult<Event> Create(EventRequest request)
+    public ActionResult<EventResponse> Create(EventRequest request)
     {
         var created = _eventService.Create(request.ToEvent());
-        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+        return CreatedAtAction(nameof(GetById), new { id = created.Id }, EventResponse.FromEvent(created));
     }
 
     [HttpPut("{id:guid}")]
