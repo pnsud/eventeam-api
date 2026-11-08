@@ -17,13 +17,6 @@ public class EventRequest : IValidatableObject
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        if (string.IsNullOrWhiteSpace(Title))
-        {
-            yield return new ValidationResult(
-                "Title is required.",
-                new[] { nameof(Title) });
-        }
-
         if (StartAt is { } start && EndAt is { } end && end <= start)
         {
             yield return new ValidationResult(
