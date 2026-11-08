@@ -1,0 +1,36 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace EventApi.Models;
+
+public class EventRequest : IValidatableObject
+{
+    [Required(AllowEmptyStrings = false)]
+    public string Title { get; set; } = string.Empty;
+
+    public string? Description { get; set; }
+
+    [Required]
+    public DateTime? StartAt { get; set; }
+
+    [Required]
+    public DateTime? EndAt { get; set; }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (StartAt is { } start && EndAt is { } end && end <= start)
+        {
+            yield return new ValidationResult(
+                "EndAt must be later than StartAt.",
+                new[] { nameof(EndAt) });
+        }
+    }
+
+    public Event ToEvent() => new()
+    {
+        Title = Title,
+        Description = Description,
+        StartAt = StartAt!.Value,
+        EndAt = EndAt!.Value
+    };
+
+}
