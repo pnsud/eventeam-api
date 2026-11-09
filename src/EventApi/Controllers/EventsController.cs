@@ -24,6 +24,9 @@ public class EventsController : ControllerBase
     [HttpGet("{id:guid}")]
     public ActionResult<EventResponse> GetById(Guid id)
     {
+        throw new Exception("test");
+        // Ожидаемый ответ: { "status": 500, "message": "test" }
+
         var ev = _eventService.GetById(id);
         if (ev is null) return NotFound();
         return Ok(EventResponse.FromEvent(ev));
