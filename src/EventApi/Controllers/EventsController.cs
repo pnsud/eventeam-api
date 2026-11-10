@@ -16,9 +16,12 @@ public class EventsController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<EventResponse>> GetAll()
+    public ActionResult<IEnumerable<EventResponse>> GetAll(
+        [FromQuery] string? title,
+        [FromQuery] DateTime? from,
+        [FromQuery] DateTime? to)
     {
-        return Ok(_eventService.GetAll().Select(EventResponse.FromEvent));
+        return Ok(_eventService.GetAll(title, from, to).Select(EventResponse.FromEvent));
     }
 
     [HttpGet("{id:guid}")]
