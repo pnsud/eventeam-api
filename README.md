@@ -15,13 +15,14 @@
 
 ## Возможности
 
-- `GET /events` — список всех событий
+- `GET /events` — страница событий. Query-параметры необязательные: title (часть названия, без учёта регистра), from (startAt не раньше), to (endAt не позже), page (по умолчанию 1), pageSize (по умолчанию 10). Ответ: totalCount, items, page, pageSize
 - `GET /events/{id}` — одно событие или **404**, если id нет
 - `POST /events` — создать событие, ответ **201 Created** с `Location`
 - `PUT /events/{id}` — обновить событие целиком, ответ **204 No Content**
 - `DELETE /events/{id}` — удалить событие, ответ **204 No Content**
 - Валидация входных данных: обязательные `title`, `startAt`, `endAt`; `endAt` строго позже `startAt`
 - Данные живут в памяти процесса: после перезапуска список снова пуст
+- Необработанное исключение — 500 и JSON { "status": 500, "message": "..." }.
 
 ## Требования
 
@@ -29,11 +30,21 @@
 
 ## Быстрый старт
 
+### Развертка приложения
 ```bash
 git clone <ссылка на репозиторий>
 cd eventeam-api
 dotnet restore
+```
+
+### Запуск приложения
+```bash
 dotnet run --project src/EventApi
+```
+
+### Тесты
+```bash
+dotnet test
 ```
 
 - Swagger UI: [http://localhost:5194/swagger](http://localhost:5194/swagger)

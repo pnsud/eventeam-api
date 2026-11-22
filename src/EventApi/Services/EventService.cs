@@ -7,14 +7,56 @@ public class EventService : IEventService
     private readonly List<Event> _events = new();
     private readonly object _lock = new();
 
-    public IEnumerable<Event> GetAll()
-    {
-        lock (_lock) return _events.ToList();
-    }
+    // public IEnumerable<Event> GetAll(string? title, DateTime? from, DateTime? to)
+    // {
+    //     lock (_lock)
+    //     {
+    //         IEnumerable<Event> query = _events;
+
+    //         if (!string.IsNullOrWhiteSpace(title))
+    //             query = query.Where(e => e.Title.Contains(title, StringComparison.OrdinalIgnoreCase));
+
+    //         if (from is not null)
+    //             query = query.Where(e => e.StartAt >= from);
+
+    //         if (to is not null)
+    //             query = query.Where(e => e.EndAt <= to);
+
+    //         return query.ToList();
+    //     }
+    // }
 
     public Event? GetById(Guid id)
     {
         lock (_lock) return _events.FirstOrDefault(e => e.Id == id);
+    }
+
+    public PaginatedResult<Event> GetAll(
+        string? title, DateTime? from, DateTime? to, int page = 1, int pageSize = 10)
+    {
+        lock (_lock)
+        {
+            IEnumerable<Event> query = _events;
+
+            if (!string.IsNullOrWhiteSpace(title))
+                query = query.Where(e => e.Title.Contains(title, StringComparison.OrdinalIgnoreCase));
+
+            if (from is not null)
+                query = query.Where(e => e.StartAt >= from);
+
+            if (to is not null)
+                query = query.Where(e => e.EndAt <= to);
+
+            var filtered = query.ToList();
+
+            return new PaginatedResult<Event>
+            {
+                TotalCount = filtered.Count,
+                Items = filtered.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
+                Page = page,
+                PageSize = pageSize
+            };
+        }
     }
 
     public Event Create(Event newEvent)

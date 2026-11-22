@@ -16,14 +16,30 @@ public class EventsController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<EventResponse>> GetAll()
+    public ActionResult<PaginatedResult<EventResponse>> GetAll(
+        [FromQuery] string? title,
+        [FromQuery] DateTime? from,
+        [FromQuery] DateTime? to,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10)
     {
-        return Ok(_eventService.GetAll().Select(EventResponse.FromEvent));
+        var result = _eventService.GetAll(title, from, to, page, pageSize);
+
+        return Ok(new PaginatedResult<EventResponse>
+        {
+            TotalCount = result.TotalCount,
+            Page = result.Page,
+            PageSize = result.PageSize,
+            Items = result.Items.Select(EventResponse.FromEvent).ToList()
+        });
     }
 
     [HttpGet("{id:guid}")]
     public ActionResult<EventResponse> GetById(Guid id)
     {
+        // throw new Exception("test");
+        // Ожидаемый ответ: { "status": 500, "message": "test" }
+
         var ev = _eventService.GetById(id);
         if (ev is null) return NotFound();
         return Ok(EventResponse.FromEvent(ev));
