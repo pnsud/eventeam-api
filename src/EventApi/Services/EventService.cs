@@ -7,24 +7,24 @@ public class EventService : IEventService
     private readonly List<Event> _events = new();
     private readonly object _lock = new();
 
-    public IEnumerable<Event> GetAll(string? title, DateTime? from, DateTime? to)
-    {
-        lock (_lock)
-        {
-            IEnumerable<Event> query = _events;
+    // public IEnumerable<Event> GetAll(string? title, DateTime? from, DateTime? to)
+    // {
+    //     lock (_lock)
+    //     {
+    //         IEnumerable<Event> query = _events;
 
-            if (!string.IsNullOrWhiteSpace(title))
-                query = query.Where(e => e.Title.Contains(title, StringComparison.OrdinalIgnoreCase));
+    //         if (!string.IsNullOrWhiteSpace(title))
+    //             query = query.Where(e => e.Title.Contains(title, StringComparison.OrdinalIgnoreCase));
 
-            if (from is not null)
-                query = query.Where(e => e.StartAt >= from);
+    //         if (from is not null)
+    //             query = query.Where(e => e.StartAt >= from);
 
-            if (to is not null)
-                query = query.Where(e => e.EndAt <= to);
+    //         if (to is not null)
+    //             query = query.Where(e => e.EndAt <= to);
 
-            return query.ToList();
-        }
-    }
+    //         return query.ToList();
+    //     }
+    // }
 
     public Event? GetById(Guid id)
     {
