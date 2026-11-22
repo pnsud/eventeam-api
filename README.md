@@ -45,7 +45,7 @@ dotnet run --project src/EventApi
 ### Тесты
 ```bash
 dotnet test
-```bash
+```
 
 - Swagger UI: [http://localhost:5194/swagger](http://localhost:5194/swagger)
 - `UseSwagger()` включён только в окружении `Development` (см. `Program.cs`). В `Production` Swagger не поднимется.
